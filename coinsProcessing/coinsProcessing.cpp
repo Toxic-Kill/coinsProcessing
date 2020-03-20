@@ -1,20 +1,27 @@
-﻿// coinsProcessing.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
+﻿#include <iostream>
+#include<opencv2/opencv.hpp>
 
-#include <iostream>
+using namespace std;
+using namespace cv;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	cv::Mat srcMat = cv::imread("D:\\Files\\coins.png");//读取图片
+	cv::Mat eroMat;
+	cv::Mat dilMat;
+	cv::Mat opeMat;
+	cv::Mat cloMat;
+	cv::Mat kernel = getStructuringElement(MORPH_RECT, Size(3, 3));//定义结构元素
+	cv::Mat binMat;
+	threshold(srcMat, binMat, 100, 255, THRESH_BINARY);//二值化
+	morphologyEx(binMat, eroMat, MORPH_ERODE, kernel);//腐蚀运算
+	morphologyEx(binMat, dilMat, MORPH_DILATE, kernel);//膨胀运算
+	morphologyEx(binMat, opeMat, MORPH_OPEN, kernel);//开运算
+	morphologyEx(binMat, cloMat, MORPH_CLOSE, kernel);//闭运算
+	cv::imshow("srcMat", srcMat);//显示腐蚀运算图像
+	cv::imshow("eroMat", eroMat);//显示膨胀运算图像
+	cv::imshow("dilMat", dilMat);//显示开运算图像
+	cv::imshow("opeMat", opeMat);//显示闭运算图像
+	cv::imshow("cloMat", cloMat);
+	waitKey(0);
 }
-
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
-
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
